@@ -28,3 +28,9 @@
 (global-set-key (kbd "M-j") 'mc/mark-next-like-this)
 (global-set-key (kbd "M-k") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+;; Org Mode
+(require 'org)
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
