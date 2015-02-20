@@ -1,6 +1,10 @@
 ;; Make emacs less annoying
 (setq inhibit-splash-screen t)
 (setq ring-bell-function 'ignore)
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+
+;;
+(setq sentence-end-double-space nil)
 
 ;; Add the MELPA repository to the package manager
 (when (>= emacs-major-version 24)
@@ -36,3 +40,19 @@
 (setq org-log-done t)
 (setq org-todo-keywords
         '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+
+(defun my/vsplit-last-buffer (prefix)
+  "Split the window vertically and display the previous buffer."
+  (interactive "p")
+  (split-window-vertically)
+  (other-window 1 nil)
+  (if (= prefix 1)
+      (switch-to-next-buffer)))
+(defun my/hsplit-last-buffer (prefix)
+  "Split the window horizontally and display the previous buffer."
+  (interactive "p")
+  (split-window-horizontally)
+  (other-window 1 nil)
+  (if (= prefix 1) (switch-to-next-buffer)))
+(bind-key "C-x 2" 'my/vsplit-last-buffer)
+(bind-key "C-x 3" 'my/hsplit-last-buffer)
