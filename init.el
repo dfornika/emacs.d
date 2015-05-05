@@ -33,6 +33,10 @@
 (global-set-key (kbd "M-k") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
+;; Line numbers
+(setq linum-format "%d ")
+(global-linum-mode 1)
+
 ;; Org Mode
 (require 'org)
 (define-key global-map "\C-cl" 'org-store-link)
