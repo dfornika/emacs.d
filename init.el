@@ -15,7 +15,8 @@
 ;; Check if packages are installed, install if necessary
 (setq package-list 
   '(multiple-cursors
-    bind-key))
+    bind-key
+    magit))
 (unless package-archive-contents
   (package-refresh-contents))
 (dolist (package package-list)
