@@ -15,12 +15,10 @@
 ;; Thanks slipset
 ;; https://raw.githubusercontent.com/slipset/emacs/master/elisp/ensure-packages.el
 (require 'cl)
-(setq url-http-attempt-keepalives nil)
+;;(setq url-http-attempt-keepalives nil)
 
 (defvar ensure-packages
-  '(bind-key
-    magit
-    multiple-cursors)
+  '(bind-key magit multiple-cursors)
   "A list of packages to ensure are installed at launch.")
 
 (defun ensure-packages-package-installed-p (p)
@@ -33,14 +31,14 @@
 (defun ensure-packages-install-missing ()
   (interactive)
   (unless (every 'identity (ensure-packages-installed-p))
-  ;; check for new packages (package versions)
-  (message "%s" "Emacs is now refreshing its package database...")
-  (package-refresh-contents)
-  (message "%s" " done.")
-  ;; install the missing packages
-  (dolist (p ensure-packages)
-    (when (not (package-installed-p p))
-      (package-install p)))))
+    ;; check for new packages (package versions)
+    (message "%s" "Emacs is now refreshing its package database...")
+    (package-refresh-contents)
+    (message "%s" " done.")
+    ;; install the missing packages
+    (dolist (p ensure-packages)
+      (when (not (package-installed-p p))
+	(package-install p)))))
 
 (provide 'ensure-packages)
 
