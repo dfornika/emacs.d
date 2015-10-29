@@ -18,7 +18,9 @@
 (setq url-http-attempt-keepalives nil)
 
 (defvar ensure-packages
-  '(bind-key magit multiple-cursors)
+  '(bind-key
+    magit
+    multiple-cursors)
   "A list of packages to ensure are installed at launch.")
 
 (defun ensure-packages-package-installed-p (p)
