@@ -12,6 +12,16 @@
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
+;; Check if packages are installed, install if necessary
+(setq package-list 
+  '(multiple-cursors
+    bind-key))
+(unless package-archive-contents
+  (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
 ;; Remap navigation keys to the home row
 (global-unset-key (kbd "C-p"))
 (global-unset-key (kbd "C-b"))
