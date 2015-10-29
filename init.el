@@ -13,15 +13,31 @@
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
 ;; Check if packages are installed, install if necessary
-(setq package-list 
+;; Thanks Bozhidar Batsov
+;; http://stackoverflow.com/users/291550/bozhidar-batsov
+;; http://stackoverflow.com/a/10102154
+(defvar auto-installed-packages 
   '(multiple-cursors
     bind-key
-    magit))
-(unless package-archive-contents
-  (package-refresh-contents))
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+    magit)
+    "A list of packages to ensure are installed at launch.")
+    
+(defun auto-packages-installed-p ()
+  (loop for p in auto-installed-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
+
+(unless (auto-packages-installed-p)
+  ;; check for new packages (package versions)
+  (message "%s" "Emacs is refreshing its package database...")
+  (package-refresh-contents)
+  (message "%s" " done.")
+  ;; install the missing packages
+  (dolist (p auto-installed-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
+(provide 'prelude-packages)
 
 ;; Remap navigation keys to the home row
 (global-unset-key (kbd "C-p"))
