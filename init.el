@@ -10,7 +10,7 @@
 (when (>= emacs-major-version 24)
   (require 'package)
   (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
 ;; Remap navigation keys to the home row
 (global-unset-key (kbd "C-p"))
