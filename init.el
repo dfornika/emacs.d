@@ -12,32 +12,37 @@
   (package-initialize)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
-;; Check if packages are installed, install if necessary
-;; Thanks Bozhidar Batsov
-;; http://stackoverflow.com/users/291550/bozhidar-batsov
-;; http://stackoverflow.com/a/10102154
-(defvar auto-installed-packages 
-  '(multiple-cursors
-    bind-key
-    magit)
-    "A list of packages to ensure are installed at launch.")
-    
-(defun auto-packages-installed-p ()
-  (loop for p in auto-installed-packages
-        when (not (package-installed-p p)) do (return nil)
-        finally (return t)))
+;; Thanks slipset
+;; https://raw.githubusercontent.com/slipset/emacs/master/elisp/ensure-packages.el
+(require 'cl)
+(setq url-http-attempt-keepalives nil)
 
-(unless (auto-packages-installed-p)
+(defvar ensure-packages
+  '(bind-key
+    magit
+    multiple-cursors)
+  "A list of packages to ensure are installed at launch.")
+
+(defun ensure-packages-package-installed-p (p)
+  (cond ((package-installed-p p) t)
+	(t nil)))
+  
+(defun ensure-packages-installed-p ()
+  (mapcar 'ensure-packages-package-installed-p ensure-packages))
+  
+(defun ensure-packages-install-missing ()
+  (interactive)
+  (unless (every 'identity (ensure-packages-installed-p))
   ;; check for new packages (package versions)
-  (message "%s" "Emacs is refreshing its package database...")
+  (message "%s" "Emacs is now refreshing its package database...")
   (package-refresh-contents)
   (message "%s" " done.")
   ;; install the missing packages
-  (dolist (p auto-installed-packages)
+  (dolist (p ensure-packages)
     (when (not (package-installed-p p))
-      (package-install p))))
+      (package-install p)))))
 
-(provide 'prelude-packages)
+(provide 'ensure-packages)
 
 ;; Remap navigation keys to the home row
 (global-unset-key (kbd "C-p"))
