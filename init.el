@@ -45,6 +45,7 @@
 (setq org-todo-keywords
         '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
+;; Change behaviour for window splitting
 (defun my/vsplit-last-buffer (prefix)
   "Split the window vertically and display the previous buffer."
   (interactive "p")
