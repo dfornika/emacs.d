@@ -15,7 +15,7 @@
 ;; Thanks slipset
 ;; https://raw.githubusercontent.com/slipset/emacs/master/elisp/ensure-packages.el
 (require 'cl)
-;;(setq url-http-attempt-keepalives nil)
+(setq url-http-attempt-keepalives nil)
 
 (defvar ensure-packages
   '(bind-key magit multiple-cursors)
@@ -40,7 +40,7 @@
       (when (not (package-installed-p p))
 	(package-install p)))))
 
-(provide 'ensure-packages)
+(ensure-packages-install-missing)
 
 ;; Remap navigation keys to the home row
 (global-unset-key (kbd "C-p"))
