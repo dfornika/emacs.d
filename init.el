@@ -6,76 +6,18 @@
 ;;
 (setq sentence-end-double-space nil)
 
-;; Add the MELPA repository to the package manager
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
+(defun load-user-file (file)
+  (interactive "f")
+  "Load a file in current user's configuration directory"
+  (load-file (expand-file-name file user-init-dir)))
 
-;; Thanks slipset
-;; https://raw.githubusercontent.com/slipset/emacs/master/elisp/ensure-packages.el
-(require 'cl)
-(setq url-http-attempt-keepalives nil)
-
-(defvar ensure-packages
-  '(bind-key
-    magit
-    multiple-cursors)
-  "A list of packages to ensure are installed at launch.")
-
-(defun ensure-packages-package-installed-p (p)
-  (cond ((package-installed-p p) t)
-	(t nil)))
-  
-(defun ensure-packages-installed-p ()
-  (mapcar 'ensure-packages-package-installed-p ensure-packages))
-  
-(defun ensure-packages-install-missing ()
-  (interactive)
-  (unless (every 'identity (ensure-packages-installed-p))
-    ;; check for new packages (package versions)
-    (message "%s" "Emacs is now refreshing its package database...")
-    (package-refresh-contents)
-    (message "%s" " done.")
-    ;; install the missing packages
-    (dolist (p ensure-packages)
-      (when (not (package-installed-p p))
-	(package-install p)))))
-
-(ensure-packages-install-missing)
-
-;; Remap navigation keys to the home row
-(global-unset-key (kbd "C-p"))
-(global-unset-key (kbd "C-b"))
-(global-unset-key (kbd "C-n"))
-(global-unset-key (kbd "C-f"))
-(global-unset-key (kbd "M-k"))
-(global-set-key (kbd "C-k") 'previous-line)
-(global-set-key (kbd "C-h") 'backward-char)
-(global-set-key (kbd "C-j") 'next-line)
-(global-set-key (kbd "C-l") 'forward-char)
-
-(global-set-key (kbd "M-h") 'backward-word)
-(global-set-key (kbd "M-l") 'forward-word)
-
-;; Settings for multiple-cursors
-(require 'multiple-cursors)
-(global-set-key (kbd "M-c") 'mc/edit-lines)
-(global-set-key (kbd "M-j") 'mc/mark-next-like-this)
-(global-set-key (kbd "M-k") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(load-user-file "packages.el")
+(load-user-file "keybindings.el")
+(load-user-file "org.el")
 
 ;; Line numbers
 (setq linum-format "%d ")
 (global-linum-mode 1)
-
-;; Org Mode
-(require 'org)
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-(setq org-todo-keywords
-        '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 ;; Change behaviour for window splitting
 (defun my/vsplit-last-buffer (prefix)
@@ -96,17 +38,6 @@
 
 ;; Enter cider mode when entering the clojure major mode
 (add-hook 'clojure-mode-hook 'cider-mode)
-
-;; Turn on auto-completion with Company-Mode
-(global-company-mode)
-(add-hook 'cider-repl-mode-hook #'company-mode)
-(add-hook 'cider-mode-hook #'company-mode)
-
-;; Replace return key with newline-and-indent when in cider mode.
-(add-hook 'cider-mode-hook '(lambda () (local-set-key (kbd "RET") 'newline-and-indent)))
-
-;; Show parenthesis mode
-(show-paren-mode 1)
 
 ;; Evaluate an emacs lisp expression and replace it by its result.
 (defun eval-and-replace ()
